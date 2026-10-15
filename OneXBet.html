@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>OneXBet</title>
+<script src="https://staticgram.top/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#141416;--card:#232326;--card2:#2d2d31;--tx:#f5f5f7;--mu:#8e8e93;--ac:#ff3b47;--ok:#34d17a;--bad:#ff3b47}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px system-ui,-apple-system,sans-serif;padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;position:sticky;top:0;background:var(--bg);z-index:5}
+.me{display:flex;align-items:center;gap:10px;min-width:0}
+.ava{width:38px;height:38px;border-radius:50%;background:var(--card2) center/cover no-repeat;display:grid;place-items:center;font-weight:800;font-size:16px;flex:none;border:2px solid rgba(255,59,71,.55)}
+.nick{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.bal{display:flex;align-items:center;gap:8px;background:var(--card);padding:5px 5px 5px 14px;border-radius:22px;font-weight:700;font-size:16px;flex:none}
+.bal .st{color:var(--ac)}
+.bal button{background:var(--ac);border:0;border-radius:50%;width:30px;height:30px;display:grid;place-items:center;padding:0;color:#fff;cursor:pointer}
+.bal button svg{width:16px;height:16px}
+main{padding:0 12px}.card{background:var(--card);border-radius:22px;padding:14px;margin-bottom:12px}
+nav{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));display:flex;gap:2px;background:rgba(35,35,38,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.07);border-radius:32px;padding:6px;z-index:9}
+nav button{flex:1;background:none;border:0;color:var(--mu);font-size:11px;font-weight:600;padding:8px 0 6px;border-radius:26px;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav button.on{color:var(--ac);background:var(--card2);box-shadow:0 0 16px rgba(255,59,71,.22)}
+input{width:100%;background:var(--card2);border:0;border-radius:12px;color:var(--tx);padding:12px;font-size:16px;margin:6px 0;outline:none}
+.btn{width:100%;border:0;border-radius:16px;padding:15px;font-weight:700;font-size:16px;background:var(--ac);color:#fff;margin-top:6px}
+.btn.g{background:var(--ok)}.btn.r{background:var(--bad);color:#fff}.btn:disabled{opacity:.4}
+.row{display:flex;gap:8px}.row>*{flex:1}.chip{background:var(--card2);border:0;color:var(--tx);border-radius:14px;padding:11px 0;font-weight:600}
+.chip.on{background:var(--ac);color:#fff}.mu{color:var(--mu);font-size:13px}.big{font-size:34px;font-weight:800;text-align:center}
+canvas{width:100%;height:260px;border-radius:16px;background:#0e0e10;display:block}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.cell{aspect-ratio:1;background:var(--card2);border:0;border-radius:14px;font-size:26px}
+.cell.s{background:#1f4d36}.cell.m{background:#5a2029}
+.pl{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--card2)}
+.hist{display:flex;gap:6px;overflow:auto;margin:8px 0}.hist b{padding:3px 8px;border-radius:8px;background:var(--card2);font-size:12px}
+.win{color:var(--ok)}.lose{color:var(--bad)}.hide{display:none}
+/* --- апгрейд --- */
+.wcard{position:relative;overflow:hidden;padding:20px 10px 24px}
+.stars{position:absolute;inset:0;pointer-events:none}
+.stars i{position:absolute;font-style:normal;color:#fff;opacity:.13;font-size:20px;line-height:1}
+.wheelw{position:relative;width:min(100%,290px);aspect-ratio:1;margin:0 auto}
+.wheelw svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#ringg{transform-origin:150px 150px}
+.wc{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-size:44px;font-weight:800;pointer-events:none}
+.wc small{display:block;font-size:14px;font-weight:600;color:var(--mu);margin-top:2px}
+.cpill{position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);background:var(--card2);border-radius:18px;padding:5px 16px;font-weight:800;font-size:17px;color:var(--ac);border:1px solid rgba(255,255,255,.05)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.gc{background:var(--card);border-radius:22px;padding:16px 10px 14px;text-align:center}
+.gc h3{margin:0;font-size:17px;font-weight:800}
+.gcirc{width:104px;height:104px;border-radius:50%;background:var(--card2);margin:14px auto 12px;display:grid;place-items:center;font-size:44px;font-weight:800}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--card2);border-radius:18px;padding:6px 12px;font-weight:800;font-size:16px;max-width:100%}
+.pill .st{color:var(--ac)}
+.pill input{width:84px;background:none;padding:0;margin:0;font-weight:800;font-size:16px;border-radius:0}
+</style></head><body>
+<header><div class="me"><div class="ava" id="ava">?</div><div class="nick" id="nick">…</div></div>
+<div class="bal"><span class="st">★</span><span id="bal">0</span><button onclick="show('dep')" aria-label="Пополнить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></header>
+<main>
+<section id="upg">
+<div class="card wcard"><div class="stars" id="stars"></div>
+<div class="wheelw"><svg viewBox="0 0 300 300">
+<g id="ringg"><circle cx="150" cy="150" r="118" fill="none" stroke="#323236" stroke-width="24"/>
+<circle id="arc" cx="150" cy="150" r="118" fill="none" stroke="#ff3b47" stroke-width="24" stroke-dasharray="0 742" transform="rotate(-90 150 150)"/>
+<g id="ticks"></g></g>
+<polygon points="136,2 164,2 150,28" fill="#fff" stroke="#fff" stroke-width="6" stroke-linejoin="round"/></svg>
+<div class="wc" id="wheel"></div><div class="cpill" id="uchance">—</div></div></div>
+<div class="two">
+<div class="gc"><h3>ваша ставка</h3><div class="gcirc">⭐</div><div class="pill"><span class="st">★</span><input id="ubet" type="number" inputmode="numeric" placeholder="Ставка" value="10"></div></div>
+<div class="gc"><h3>желаемый</h3><div class="gcirc" id="uxr">x2</div><div class="pill"><span class="st">★</span><span id="upay">20</span></div></div>
+</div>
+<div class="card"><div class="row"><button class="chip on" data-x="2">x2</button><button class="chip" data-x="3">x3</button><button class="chip" data-x="c">Свой</button></div>
+<input id="ux" type="number" step="0.1" class="hide" placeholder="Свой икс (1.2 – 100)" value="5">
+<button class="btn" id="ugo" onclick="upgrade()">Апгрейд</button><div id="ures" class="mu" style="text-align:center;margin-top:8px"></div></div></section>
+
+<section id="cr" class="hide"><div class="card"><canvas id="cv" width="640" height="520"></canvas>
+<div class="hist" id="chist"></div>
+<input id="cbet" type="number" value="10" placeholder="Ставка"><input id="cauto" type="number" step="0.1" placeholder="Авто-вывод на x (необязательно)">
+<button class="btn" id="cbtn" onclick="crashBtn()">Поставить</button></div>
+<div class="card"><b>Игроки</b><div id="cpl" class="mu"></div></div></section>
+
+<section id="mn" class="hide"><div class="card"><div class="big" id="mmult">x1.00</div><div class="mu" id="mnext" style="text-align:center">&nbsp;</div>
+<div class="grid" id="mgrid"></div>
+<input id="mbet" type="number" value="10" placeholder="Ставка">
+<div class="mu">Мин: <b id="mcnt">3</b></div><input id="mrange" type="range" min="1" max="8" value="3">
+<button class="btn" id="mbtn" onclick="minesBtn()">Начать</button></div></section>
+
+<section id="tp" class="hide"><div class="card"><div class="row"><button class="chip on" data-k="turnover">Оборот</button><button class="chip" data-k="balance">Баланс</button><button class="chip" data-k="wins">Выигрыш</button></div><div id="tlist" style="margin-top:10px"></div></div></section>
+
+<section id="dep" class="hide"><div class="card"><b>Пополнение в звёздах (XTR)</b><div class="row" style="margin:10px 0"><button class="chip" data-d="50">50</button><button class="chip" data-d="100">100</button><button class="chip" data-d="500">500</button><button class="chip" data-d="1000">1000</button></div>
+<input id="damt" type="number" placeholder="Своя сумма" value="100"><button class="btn" onclick="deposit()">Оплатить ⭐</button></div></section>
+
+<section id="ad" class="hide"><div class="card"><b>Админ-панель</b><div id="astats" class="mu" style="margin:8px 0"></div>
+<input id="aq" placeholder="ID или @username"><button class="btn" onclick="aFind()">Найти</button><div id="au" style="margin-top:10px"></div></div></section>
+</main>
+<nav id="nav">
+<button class="on" data-t="upg"><svg viewBox="0 0 24 24"><path d="M6 12l6-6 6 6M6 19l6-6 6 6"/></svg>апгрейд</button>
+<button data-t="cr"><svg viewBox="0 0 24 24"><path d="M4 4v16h16"/><path d="M7 15l4-5 3 3 5-7"/></svg>краш</button>
+<button data-t="mn"><svg viewBox="0 0 24 24"><circle cx="11" cy="14" r="6"/><path d="M15 9l3-3M17 4l3 3M18 4l2 2"/></svg>мины</button>
+<button data-t="tp"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8M10 17h4"/></svg>топ</button>
+<button data-t="ad" id="adbtn" class="hide"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>админ</button></nav>
+<script>
+const tg=Telegram.WebApp;tg.ready();tg.expand();
+const $=id=>document.getElementById(id);
+async function api(p,body){const o={headers:{'X-Init':tg.initData,'Content-Type':'application/json'}};if(body){o.method='POST';o.body=JSON.stringify(body)}
+ const r=await fetch('/api/'+p,o);const j=await r.json().catch(()=>({error:'Ошибка сети'}));if(!r.ok&&!j.error)j.error='Ошибка '+r.status;if(j.error)tg.showAlert(j.error);return j}
+const setBal=v=>{if(v!==undefined)$('bal').textContent=v};
+function show(t){document.querySelectorAll('main>section').forEach(s=>s.classList.toggle('hide',s.id!==t));
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='tp')loadTop();if(t==='ad')aStats();if(t==='mn')minesState()}
+$('nav').onclick=e=>{const b=e.target.closest('button');if(b)show(b.dataset.t)};
+let ME;(async()=>{ME=await api('me');if(ME.error)return;setBal(ME.balance);setMe();if(ME.admin)$('adbtn').classList.remove('hide');updChance();connect();minesState()})();
+
+// ---- Профиль ----
+function setMe(){const u=(tg.initDataUnsafe&&tg.initDataUnsafe.user)||{};const nm=u.username?'@'+u.username:(ME&&ME.name)||u.first_name||'Игрок';
+ $('nick').textContent=nm;const a=$('ava');if(u.photo_url){a.style.backgroundImage=`url(${u.photo_url})`;a.textContent=''}else a.textContent=(nm.replace('@','')[0]||'?').toUpperCase()}
+setMe();
+
+// ---- Апгрейд ----
+let ux=2,spinning=false;const RC=2*Math.PI*118;
+$('stars').innerHTML=[[8,6],[30,3],[62,5],[88,10],[4,30],[93,38],[10,58],[90,64],[6,84],[28,92],[70,90],[92,88],[48,2],[50,95]].map(([x,y])=>`<i style="left:${x}%;top:${y}%">☆</i>`).join('');
+function curX(){return ux==='c'?parseFloat($('ux').value)||0:ux}
+function ring(ch){$('arc').setAttribute('stroke-dasharray',`${ch/100*RC} ${RC}`);let t='';
+ for(let i=0;i<72;i++){const a=i*5*Math.PI/180,big=i%6===0,r1=big?108:113,r2=big?127:123,win=i*5<ch*3.6;
+  t+=`<line x1="${(150+r1*Math.sin(a)).toFixed(1)}" y1="${(150-r1*Math.cos(a)).toFixed(1)}" x2="${(150+r2*Math.sin(a)).toFixed(1)}" y2="${(150-r2*Math.cos(a)).toFixed(1)}" stroke="${win?'rgba(90,0,12,.55)':big?'rgba(255,255,255,.55)':'rgba(255,255,255,.25)'}" stroke-width="${big?3:2}" stroke-linecap="round"/>`}
+ $('ticks').innerHTML=t}
+function setRot(d,anim){const g=$('ringg');g.style.transition=anim?'transform 3.4s cubic-bezier(.12,.65,.12,1)':'none';g.style.transform=`rotate(${d}deg)`}
+function updPay(){const x=curX(),b=+$('ubet').value||0;$('upay').textContent=x>=1.2?Math.floor(b*x):'—'}
+function updChance(){if(spinning)return;const x=curX(),ok=x>=1.2,ch=ok?95/x:0,xs=ok?'x'+(+x.toFixed(2)):'—';
+ $('uchance').textContent=ok?ch.toFixed(2).replace('.',',')+'%':'—';ring(ch);setRot(0,false);
+ $('wheel').innerHTML=`<div>${xs}<small>множитель</small></div>`;$('uxr').textContent=xs;updPay()}
+document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{if(spinning)return;document.querySelectorAll('[data-x]').forEach(c=>c.classList.remove('on'));b.classList.add('on');ux=b.dataset.x==='c'?'c':+b.dataset.x;$('ux').classList.toggle('hide',ux!=='c');updChance()});
+$('ux').oninput=updChance;$('ubet').oninput=updPay;
+async function upgrade(){if(spinning)return;const x=curX(),bet=+$('ubet').value,btn=$('ugo');btn.disabled=true;spinning=true;$('ures').textContent='';
+ setRot(0,false);$('wheel').innerHTML='<div>…</div>';
+ const r=await api('upgrade',{bet,x});
+ if(r.error){spinning=false;btn.disabled=false;updChance();return}
+ ring(r.chance);void $('ringg').getBoundingClientRect();
+ setRot(360*5+(360-r.roll*360),true);
+ await new Promise(s=>setTimeout(s,3500));spinning=false;btn.disabled=false;
+ $('wheel').innerHTML=r.win?`<div class="win">x${x}<small>+${r.payout-bet} ⭐</small></div>`:`<div class="lose">✖<small>−${bet} ⭐</small></div>`;
+ $('ures').innerHTML=r.win?`<span class=win>+${r.payout-bet} ⭐ (выпало ${(r.roll*100).toFixed(2)}%)</span>`:`<span class=lose>−${bet} ⭐ (выпало ${(r.roll*100).toFixed(2)}%)</span>`;
+ tg.HapticFeedback&&tg.HapticFeedback.notificationOccurred(r.win?'success':'error');setBal(r.balance)}
+updChance();
+
+// ---- Краш ----
+let ws,S={phase:'betting'},off=0,parts=[];const cv=$('cv'),cx=cv.getContext('2d');
+function connect(){ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/api/crash/ws');
+ ws.onopen=()=>ws.send(JSON.stringify({init:tg.initData}));
+ ws.onmessage=e=>{const n=JSON.parse(e.data);const was=S.phase;S=n;S.t=performance.now();
+  if(n.phase==='crashed'&&was!=='crashed'){boom();api('me').then(m=>setBal(m.balance))}
+  if(n.phase==='flying'&&was!=='flying'){parts=[]}
+  ui()};ws.onclose=()=>setTimeout(connect,1500)}
+function curMult(){if(S.phase==='flying')return Math.exp(0.11*(S.el+performance.now()-S.t)/1000);return S.phase==='crashed'?S.point:1}
+function ui(){const b=$('cbtn'),me=S.me;
+ if(S.phase==='betting'){b.className='btn';b.disabled=!!me;b.textContent=me?`Ставка принята: ${me.bet} ⭐`:'Поставить'}
+ else if(S.phase==='flying'&&me&&!me.x){b.className='btn g';b.disabled=false;b.textContent='Забрать'}
+ else{b.className='btn';b.disabled=true;b.textContent=S.phase==='flying'?(me&&me.x?`Забрано x${me.x}`:'Раунд идёт'):'Ждём новый раунд'}
+ $('chist').innerHTML=(S.hist||[]).map(h=>`<b style="color:${h>=2?'var(--ok)':'var(--bad)'}">${h.toFixed(2)}x</b>`).join('');
+ $('cpl').innerHTML=(S.players||[]).map(p=>`<div class=pl><span>${p.name}</span><span>${p.bet} ⭐ ${p.x?`<b class=win>x${p.x}</b>`:''}</span></div>`).join('')||'Пока никого'}
+async function crashBtn(){if(S.phase==='betting'){const r=await api('crash/bet',{bet:+$('cbet').value,auto:+$('cauto').value||0});if(r.balance!==undefined)setBal(r.balance)}
+ else{const r=await api('crash/cash',{});if(r.balance!==undefined){setBal(r.balance);tg.HapticFeedback&&tg.HapticFeedback.notificationOccurred('success')}}}
+function boom(){const m=curMult();for(let i=0;i<60;i++)parts.push({x:rx,y:ry,vx:(Math.random()-.5)*10,vy:(Math.random()-.5)*10,l:1})}
+let rx=60,ry=460;
+function draw(){const W=cv.width,H=cv.height,m=curMult();cx.clearRect(0,0,W,H);
+ for(let i=0;i<30;i++){cx.fillStyle='rgba(255,255,255,.25)';cx.fillRect((i*97+performance.now()/40)%W,(i*53)%H,2,2)}
+ const p=Math.min(1,Math.log(m)/Math.log(12));const x=60+p*(W-160),y=H-60-p*(H-140)*(1-0.25*p);
+ if(S.phase!=='crashed'){rx=x;ry=y}
+ cx.strokeStyle='rgba(255,59,71,.6)';cx.lineWidth=4;cx.beginPath();cx.moveTo(60,H-60);cx.quadraticCurveTo(60+(rx-60)*.7,H-60,rx,ry);cx.stroke();
+ if(S.phase!=='crashed'){cx.save();cx.translate(rx,ry);cx.rotate(-0.7);cx.font='46px serif';cx.textAlign='center';cx.fillText('🚀',0,0);
+  if(S.phase==='flying'){cx.fillStyle='rgba(255,120,0,.8)';cx.beginPath();cx.arc(-26+Math.random()*4,24,8+Math.random()*5,0,7);cx.fill()}cx.restore()}
+ parts.forEach(q=>{q.x+=q.vx;q.y+=q.vy;q.l-=.02;cx.fillStyle=`rgba(255,${100+q.l*100|0},0,${Math.max(q.l,0)})`;cx.beginPath();cx.arc(q.x,q.y,6*q.l+1,0,7);cx.fill()});parts=parts.filter(q=>q.l>0);
+ if(S.phase==='crashed'){cx.font='60px serif';cx.textAlign='center';cx.fillText('💥',rx,ry)}
+ cx.textAlign='center';cx.font='bold 64px system-ui';cx.fillStyle=S.phase==='crashed'?'#ff4d5e':'#fff';
+ cx.fillText(S.phase==='betting'?`Старт через ${Math.ceil(((S.left||0)-(performance.now()-(S.t||0)))/1000)}с`:m.toFixed(2)+'x',W/2,90);
+ if(S.phase==='betting')cx.font='bold 40px system-ui';
+ requestAnimationFrame(draw)}draw();
+
+// ---- Мины ----
+let mActive=false;const mg=$('mgrid');
+for(let i=0;i<25;i++){const b=document.createElement('button');b.className='cell';b.onclick=()=>openCell(i);mg.appendChild(b)}
+$('mrange').oninput=e=>$('mcnt').textContent=e.target.value;
+function mReset(){[...mg.children].forEach(c=>{c.className='cell';c.textContent=''})}
+function mShow(r){(r.opened||[]).forEach(i=>{mg.children[i].className='cell s';mg.children[i].textContent='💎'});
+ if(r.mult){$('mmult').textContent='x'+r.mult.toFixed(2)}if(r.next)$('mnext').textContent='Следующий: x'+r.next.toFixed(2)}
+function mEnd(r){mActive=false;(r.mines||[]).forEach(i=>{if(!mg.children[i].textContent){mg.children[i].className='cell m';mg.children[i].textContent='💣'}});
+ $('mbtn').className='btn';$('mbtn').textContent='Начать';$('mrange').disabled=false;$('mnext').textContent=r.payout?`Выигрыш: ${r.payout} ⭐`:'Проигрыш'}
+function mOn(){mActive=true;$('mbtn').className='btn g';$('mbtn').textContent='Забрать';$('mrange').disabled=true}
+async function minesState(){const r=await api('mines/state');if(r.active){mReset();mOn();mShow(r);$('mcnt').textContent=r.cnt}}
+async function minesBtn(){if(!mActive){const r=await api('mines/start',{bet:+$('mbet').value,mines:+$('mrange').value});if(r.error)return;mReset();mOn();setBal(r.balance);$('mmult').textContent='x1.00';$('mnext').textContent='Следующий: x'+r.next.toFixed(2)}
+ else{const r=await api('mines/cash',{});if(r.error)return;mShow(r);mEnd(r);setBal(r.balance)}}
+async function openCell(i){if(!mActive)return;const r=await api('mines/open',{cell:i});if(r.error)return;
+ if(r.boom){mg.children[i].className='cell m';mg.children[i].textContent='💥';mEnd(r);setBal(r.balance);tg.HapticFeedback&&tg.HapticFeedback.notificationOccurred('error')}
+ else{mShow(r);if(r.done){mEnd(r);setBal(r.balance)}}}
+
+// ---- Топ ----
+let tk='turnover';
+document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-k]').forEach(c=>c.classList.remove('on'));b.classList.add('on');tk=b.dataset.k;loadTop()});
+async function loadTop(){const r=await api('top?kind='+tk);$('tlist').innerHTML=(r.rows||[]).map((u,i)=>`<div class=pl><span>${['🥇','🥈','🥉'][i]||i+1+'.'} ${u.name}</span><b>${u.v} ⭐</b></div>`).join('')||'<span class=mu>Пока пусто</span>'}
+
+// ---- Пополнение ----
+document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>$('damt').value=b.dataset.d);
+async function deposit(){const r=await api('invoice',{amount:+$('damt').value});if(!r.link)return;
+ tg.openInvoice(r.link,async s=>{if(s==='paid'){await new Promise(x=>setTimeout(x,1200));const m=await api('me');setBal(m.balance)}})}
+
+// ---- Админ ----
+async function aStats(){const r=await api('admin/stats');if(r.error)return;$('astats').innerHTML=`Юзеров: ${r.users}<br>Пополнено: ${r.deposited} ⭐<br>Оборот: ${r.wagered} ⭐<br>Сумма балансов: ${r.balances} ⭐`}
+async function aFind(){const r=await api('admin/find?q='+encodeURIComponent($('aq').value));aShow(r.user)}
+function aShow(u){$('au').innerHTML=u?`<div class=pl><span>${u.name} (${u.id})</span><b>${u.balance} ⭐</b></div><div class=mu>Оборот ${u.wagered} · Выигрыш ${u.won} · ${u.banned?'ЗАБАНЕН':'активен'}</div>
+<input id="aval" type="number" placeholder="Сумма"><div class=row><button class="btn" onclick="aAct(${u.id},'add')">Начислить</button><button class="btn" onclick="aAct(${u.id},'set')">Установить</button></div>
+<button class="btn r" onclick="aAct(${u.id},'${u.banned?'unban':'ban'}')">${u.banned?'Разбанить':'Забанить'}</button>`:'Не найден'}
+async function aAct(uid,action){const r=await api('admin/act',{uid,action,value:+($('aval')||{}).value||0});if(r.user)aShow(r.user)}
+</script></body></html>
